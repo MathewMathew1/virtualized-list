@@ -42,7 +42,7 @@ const MyItem = ({ data, index, style }) => (
 | Prop              | Type                                                                     | Description                                        |
 |-------------------|--------------------------------------------------------------------------|----------------------------------------------------|
 | `data`            | `T[]`                                                                    | Array of items to render                           |
-| `itemSize`        | `number` \| `number[]`                                                   | Fixed or variable size per item                    |
+| `itemSize`        | `number` \| `number[] \| ((index: number) => number)`                    | Fixed or variable size per item                    |
 | `ItemComponent`   | `React.ComponentType`                                                    | Component to render each item                      |
 | `direction`       | `"vertical"` \| `"horizontal"`                                           | Scroll direction                                   |
 | `height` / `width`| `number`                                                                 | Viewport size (depending on direction)             |
@@ -58,8 +58,8 @@ const MyItem = ({ data, index, style }) => (
 |--------------------------|--------------------------------------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------|
 | `rowCount`               | `number`                                                                                   | ✅       | Total number of rows.                                                                          |
 | `columnCount`            | `number`                                                                                   | ✅       | Total number of columns.                                                                       |
-| `rowHeights`             | `number \| number[]`                                                                       | ✅       | Height of each row (fixed or variable per index).                                              |
-| `columnWidths`           | `number \| number[]`                                                                       | ✅       | Width of each column (fixed or variable per index).                                            |
+| `rowHeights`             | `number \| number[] \| ((index: number) => number)`                                        | ✅       | Height of each row (fixed or variable per index).                                              |
+| `columnWidths`           | `number \| number[] \| ((index: number) => number)`                                        | ✅       | Width of each column (fixed or variable per index).                                            |
 | `height`                 | `number`                                                                                   | ✅       | Height of the visible table viewport.                                                          |
 | `width`                  | `number`                                                                                   | ✅       | Width of the visible table viewport.                                                           |
 | `CellComponent`          | `React.ComponentType<{ rowIndex, columnIndex, style }>`                                    | ✅       | Component used to render individual cells.                                                     |
