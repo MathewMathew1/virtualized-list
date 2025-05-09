@@ -16,12 +16,12 @@ A lightweight, flexible, and type-safe virtualized list and table component for 
 
 ##  Installation
 
-npm install virtualized-list
+npm i @mathewmathew1/virtualized-list
 
 The VirtualizedList handles large lists efficiently by only rendering items visible in the viewport (plus a small customizable over-scan). It supports both horizontal and vertical scrolling.
 
 ``` javascript
-import { VirtualizedList } from "react-virtualized-flex";
+import { VirtualizedList } from from "@mathewmathew1/virtualized-list";
 
 const MyItem = ({ data, index, style }) => (
   <div style={style}>{data[index]}</div>
