@@ -14,9 +14,7 @@ const VirtualizedTableContent = <T, K>({
   innerStyle,
   additionalData,
 }: VirtualizedTableContentProps<T>) => {
-  useEffect(() => {
-    console.log("first")
-  }, []);
+
   const cells = [];
 
   for (let row = visibleRows.firstVisible; row <= visibleRows.lastVisible; row++) {

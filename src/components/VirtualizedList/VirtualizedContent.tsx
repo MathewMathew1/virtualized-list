@@ -19,7 +19,7 @@ const VirtualizedListContent = <T, K>({
       {data.map((_item, i) =>
         i >= firstVisible && i <= lastVisible ? (
           <ItemComponent
-            key={`i`}
+            key={`${i}`}
             data={data}
             index={i}
             style={getItemStyle(i, itemSize, direction)}

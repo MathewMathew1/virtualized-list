@@ -9,38 +9,33 @@ export function useScrollOffset2D(
 
   const lastUpdateRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const pendingTop = useRef<number | null>(null);
-  const pendingLeft = useRef<number | null>(null);
+  const pendingTop = useRef<number>(0);
+  const pendingLeft = useRef<number>(0);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const now = Date.now();
     const target = e.currentTarget;
-    const newTop = target.scrollTop;
-    const newLeft = target.scrollLeft;
+
+    pendingTop.current = target.scrollTop;
+    pendingLeft.current = target.scrollLeft;
 
     const timeSinceLast = now - lastUpdateRef.current;
 
-    const applyUpdate = (top: number, left: number) => {
+    const applyUpdate = () => {
       lastUpdateRef.current = Date.now();
-      setScrollTop(top);
-      setScrollLeft(left);
-      onScroll?.(top, left);
+      setScrollTop(pendingTop.current);
+      setScrollLeft(pendingLeft.current);
+      onScroll?.(pendingTop.current, pendingLeft.current);
     };
 
     if (timeSinceLast >= MINIMUM_DELAY_FOR_SCROLL_OFFSET) {
-      applyUpdate(newTop, newLeft);
+      applyUpdate();
     } else {
-      pendingTop.current = newTop;
-      pendingLeft.current = newLeft;
-
       if (!timeoutRef.current) {
         const delay = MINIMUM_DELAY_FOR_SCROLL_OFFSET - timeSinceLast;
         timeoutRef.current = setTimeout(() => {
-          if (pendingTop.current !== null && pendingLeft.current !== null) {
-            applyUpdate(pendingTop.current, pendingLeft.current);
-            pendingTop.current = null;
-            pendingLeft.current = null;
-          }
+          applyUpdate();
+
           timeoutRef.current = null;
         }, delay);
       }
@@ -49,4 +44,3 @@ export function useScrollOffset2D(
 
   return { scrollTop, scrollLeft, handleScroll };
 }
-

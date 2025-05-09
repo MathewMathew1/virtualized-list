@@ -2,39 +2,43 @@ import { useRef, useState } from "react";
 import { Direction } from "../types/VirtualizedListTypes";
 import { MINIMUM_DELAY_FOR_SCROLL_OFFSET } from "../constants/scroll";
 
-export const useScrollOffset = (onScrollOffsetChange?: (offset: number) => void) => {
+export const useScrollOffset = (
+  onScrollOffsetChange?: (offset: number) => void
+) => {
   const [offset, setOffset] = useState(0);
   const lastUpdateTimeRef = useRef(0);
-  const pendingValueRef = useRef<number | null>(null);
+  const pendingValueRef = useRef<number>(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>, direction: Direction) => {
-    const scrollValue = direction === "horizontal"
-      ? e.currentTarget.scrollLeft
-      : e.currentTarget.scrollTop;
+  const handleScroll = (
+    e: React.UIEvent<HTMLDivElement>,
+    direction: Direction
+  ) => {
+    const scrollValue =
+      direction === "horizontal"
+        ? e.currentTarget.scrollLeft
+        : e.currentTarget.scrollTop;
 
     const now = Date.now();
     const timeSinceLastUpdate = now - lastUpdateTimeRef.current;
+    pendingValueRef.current = scrollValue;
 
-    const applyUpdate = (value: number) => {
+    const applyUpdate = () => {
       lastUpdateTimeRef.current = Date.now();
-      setOffset(value);
+      setOffset(pendingValueRef.current);
       if (onScrollOffsetChange) {
-        onScrollOffsetChange(value);
+        onScrollOffsetChange(pendingValueRef.current);
       }
     };
 
     if (timeSinceLastUpdate >= MINIMUM_DELAY_FOR_SCROLL_OFFSET) {
-      applyUpdate(scrollValue);
+      applyUpdate();
     } else {
-
-      pendingValueRef.current = scrollValue;
       if (!timeoutRef.current) {
         const delay = MINIMUM_DELAY_FOR_SCROLL_OFFSET - timeSinceLastUpdate;
         timeoutRef.current = setTimeout(() => {
           if (pendingValueRef.current !== null) {
-            applyUpdate(pendingValueRef.current);
-            pendingValueRef.current = null;
+            applyUpdate();
           }
           timeoutRef.current = null;
         }, delay);
@@ -44,4 +48,3 @@ export const useScrollOffset = (onScrollOffsetChange?: (offset: number) => void)
 
   return { scrollOffset: offset, handleScroll };
 };
-
