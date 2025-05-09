@@ -27,9 +27,7 @@ export function useVisibleIndices(
           break;
         }
         current += getSize(itemSize, i);
-        if(typeof itemSize == "function"){
-          console.log({a: getSize(itemSize, i), viewportSizeWithPadding, current, i});
-        }
+
         
       } 
       

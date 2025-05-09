@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { getCellStyle } from "../../helpers/cellStyle";
 import type {
   VirtualizedTableCellStyle,
@@ -13,61 +14,28 @@ const VirtualizedTableContent = <T, K>({
   innerStyle,
   additionalData,
 }: VirtualizedTableContentProps<T>) => {
-  return (
-    <>
-      <div style={innerStyle}>
-        {Array.from(
-          { length: visibleRows.lastVisible - visibleRows.firstVisible + 1 },
-          (_, rowIdx) => {
-            const row = visibleRows.firstVisible + rowIdx;
+  useEffect(() => {
+    console.log("first")
+  }, []);
+  const cells = [];
 
-            return Array.from(
-              {
-                length:
-                  visibleColumns.lastVisible - visibleColumns.firstVisible + 1,
-              },
-              (_, colIdx) => {
-                const col = visibleColumns.firstVisible + colIdx;
-                const style = getCellStyle({
-                  row,
-                  col,
-                  rowHeights,
-                  columnWidths,
-                });
-
-                return renderItem(CellComponent, {
-                  key: `${row}-${col}`,
-                  columnIndex: col,
-                  rowIndex: row,
-                  style: style,
-                  additionalData,
-                });
-              }
-            );
-          }
-        )}
-      </div>
-    </>
-  );
-};
-
-function renderItem<K>(
-  Component: React.ComponentType<any>,
-  props: {
-    columnIndex: number;
-    style: VirtualizedTableCellStyle;
-    additionalData?: K;
-    key: string;
-    rowIndex: number;
+  for (let row = visibleRows.firstVisible; row <= visibleRows.lastVisible; row++) {
+    for (let col = visibleColumns.firstVisible; col <= visibleColumns.lastVisible; col++) {
+      const style = getCellStyle({ row, col, rowHeights, columnWidths });
+  
+      cells.push(
+        <CellComponent
+          key={`${row}-${col}`}
+          rowIndex={row}
+          columnIndex={col}
+          style={style}
+          additionalData={additionalData as T extends undefined ? undefined : T}
+        />
+      );
+    }
   }
-) {
-  const { key, additionalData, ...rest } = props;
-
-  return additionalData !== undefined ? (
-    <Component key={key} {...rest} additionalData={additionalData} />
-  ) : (
-    <Component key={key} {...rest} />
-  );
-}
+  
+  return <div style={innerStyle}>{cells}</div>;
+};
 
 export default VirtualizedTableContent;

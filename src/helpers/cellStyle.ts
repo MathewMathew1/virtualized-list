@@ -1,5 +1,7 @@
 import { VirtualizedTableCellStyle } from "../types/VirtualizedTableTypes";
 
+const styleCache = new Map<string, VirtualizedTableCellStyle>();
+
 export function getCellStyle({
   row,
   col,
@@ -39,12 +41,14 @@ export function getCellStyle({
   const height = getSize(row, rowHeights);
   const width = getSize(col, columnWidths);
 
-  return {
+  const style: VirtualizedTableCellStyle = {
     position: "absolute",
     top,
     left,
     height,
     width,
   };
+
+  return style
 }
 
