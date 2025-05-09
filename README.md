@@ -1,4 +1,4 @@
-#  react-virtualized-flex
+#  virtualized-list
 
 A lightweight, flexible, and type-safe virtualized list and table component for rendering large datasets efficiently using React. Designed to be minimal yet extensible with customizable wrappers, item rendering, and scroll handling.
 
@@ -16,11 +16,11 @@ A lightweight, flexible, and type-safe virtualized list and table component for 
 
 ##  Installation
 
-npm install react-virtualized-flex
+npm install virtualized-list
 
 The VirtualizedList handles large lists efficiently by only rendering items visible in the viewport (plus a small customizable over-scan). It supports both horizontal and vertical scrolling.
 
-<details> <summary>
+``` javascript
 import { VirtualizedList } from "react-virtualized-flex";
 
 const MyItem = ({ data, index, style }) => (
@@ -34,7 +34,7 @@ const MyItem = ({ data, index, style }) => (
   height={300}
   ItemComponent={MyItem}
 />
-</summary></details>
+```
 
 
 ###  Props: `VirtualizedListProps<T, Item>`
@@ -46,10 +46,52 @@ const MyItem = ({ data, index, style }) => (
 | `ItemComponent`   | `React.ComponentType`                                                    | Component to render each item                      |
 | `direction`       | `"vertical"` \| `"horizontal"`                                           | Scroll direction                                   |
 | `height` / `width`| `number`                                                                 | Viewport size (depending on direction)             |
-| `overScanCount`   | `number` _(optional)_                                                    | Extra items rendered outside viewport              |
+| `overScanCount`   | `number` _(optional)_ 5 by default                                       | Extra items rendered outside viewport              |
 | `onScroll`        | `(offset: number) => void` _(optional)_                                  | Callback fired when scrolling                      |
 | `WrapperComponent`| `React.ComponentType<{ children: React.ReactNode }>` _(optional)_        | Custom wrapper around list content                 |
 | `additionalData`  | `any` _(optional)_                                                       | Additional props passed to `ItemComponent`         |
+
+
+
+###  Props: `VirtualizedTableProps<T, Item>`
+| Prop                     | Type                                                                                       | Required | Description                                                                                     |
+|--------------------------|--------------------------------------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------|
+| `rowCount`               | `number`                                                                                   | ✅       | Total number of rows.                                                                          |
+| `columnCount`            | `number`                                                                                   | ✅       | Total number of columns.                                                                       |
+| `rowHeights`             | `number \| number[]`                                                                       | ✅       | Height of each row (fixed or variable per index).                                              |
+| `columnWidths`           | `number \| number[]`                                                                       | ✅       | Width of each column (fixed or variable per index).                                            |
+| `height`                 | `number`                                                                                   | ✅       | Height of the visible table viewport.                                                          |
+| `width`                  | `number`                                                                                   | ✅       | Width of the visible table viewport.                                                           |
+| `CellComponent`          | `React.ComponentType<{ rowIndex, columnIndex, style }>`                                    | ✅       | Component used to render individual cells.                                                     |
+| `overScanCount`          | `number`                                                                                   | ❌       | Additional rows/columns rendered beyond viewport for smoother scrolling. Default: `3`.         |
+| `onScroll`               | `(xOffset: number, yOffset: number) => void`                                               | ❌       | Callback triggered on scroll.                                                                  |
+| `WrapperComponent`       | `React.ComponentType<{ children: React.ReactNode }>`                                       | ❌       | Optional wrapper around the entire table content.                                              |
+| `headers`                | `Partial<Record<"top" \| "bottom" \| "left" \| "right", VirtualizedTableHeader>>`          | ❌       | Defines sticky headers for each table side.                                                    |
+| `AbsoluteElementComponent` | `React.ComponentType<{ currentLeftOffset: number; currentTopOffset: number }>`           | ❌       | Component rendered absolutely in scroll container (e.g. indicators, overlays).                 |
+| `additionalData`         | `any`                                                                                      | ❌       | Additional data passed to CellComponent.
+
+
+Header type
+```typescript
+  {
+  type: "custom";
+  size: number;
+  component: React.ComponentType<{
+    position: { left: number; top: number };
+    visibleRows: { firstVisible: number; lastVisible: number };
+    visibleColumns: { firstVisible: number; lastVisible: number };
+  }>;
+}
+{
+  type: "cell";
+  size: number;
+  component: React.ComponentType<{
+    columnIndex: number;
+    style: VirtualizedHeaderStyle;
+  }>;
+}
+
+```
 
 License
 MIT © MathewMathew1
