@@ -1,0 +1,1 @@
+export const MINIMUM_DELAY_FOR_SCROLL_OFFSET = 100
