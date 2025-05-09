@@ -9,8 +9,8 @@ import { TopHeaderSection } from "./TopHeader";
 
 interface StickyHeadersProps {
   headers?: Partial<Record<HeaderPosition, VirtualizedTableHeader>>;
-  rowHeights: number | number[];
-  columnWidths: number | number[];
+  rowHeights: number[] | number | ((index: number) => number);
+  columnWidths: number[] | number | ((index: number) => number);
   visibleRows: { firstVisible: number; lastVisible: number };
   visibleColumns: { firstVisible: number; lastVisible: number };
   height: number;

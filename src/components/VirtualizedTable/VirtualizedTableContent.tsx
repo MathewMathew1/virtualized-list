@@ -17,14 +17,14 @@ const VirtualizedTableContent = <T, K>({
     <>
       <div style={innerStyle}>
         {Array.from(
-          { length: visibleRows.lastVisible - visibleRows.firstVisible },
+          { length: visibleRows.lastVisible - visibleRows.firstVisible + 1 },
           (_, rowIdx) => {
             const row = visibleRows.firstVisible + rowIdx;
 
             return Array.from(
               {
                 length:
-                  visibleColumns.lastVisible - visibleColumns.firstVisible,
+                  visibleColumns.lastVisible - visibleColumns.firstVisible + 1,
               },
               (_, colIdx) => {
                 const col = visibleColumns.firstVisible + colIdx;
@@ -62,7 +62,7 @@ function renderItem<K>(
   }
 ) {
   const { key, additionalData, ...rest } = props;
-  console.log(additionalData);
+
   return additionalData !== undefined ? (
     <Component key={key} {...rest} additionalData={additionalData} />
   ) : (

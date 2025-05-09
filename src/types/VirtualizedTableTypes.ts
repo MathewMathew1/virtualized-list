@@ -14,6 +14,8 @@ export interface VirtualizedTableRef {
 }
 
 export interface VirtualizedTableContentProps<K> {
+  rowHeights: number[] | number | ((index: number) => number);
+  columnWidths: number[] | number | ((index: number) => number);
   visibleRows: { firstVisible: number; lastVisible: number };
   visibleColumns: { firstVisible: number; lastVisible: number };
   CellComponent: React.ComponentType<{
@@ -35,8 +37,8 @@ type InferAdditionalData<T> = T extends React.ComponentType<infer P>
 export type VirtualizedTableProps<Item extends React.ComponentType<any>> = {
   rowCount: number;
   columnCount: number;
-  rowHeights: number[] | number;
-  columnWidths: number[] | number;
+  rowHeights: number[] | number | ((index: number) => number);
+  columnWidths: number[] | number | ((index: number) => number);
   overScanCount?: number;
   height: number;
   width: number;

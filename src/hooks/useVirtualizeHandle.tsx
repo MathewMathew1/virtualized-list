@@ -1,5 +1,6 @@
 import { useImperativeHandle } from "react";
 import { VirtualizedListRef } from "../types/VirtualizedListTypes";
+import { getOffset } from "../helpers/size";
 
 export type Options = {offset: number, align: "start"|"center"|"end"}
 
@@ -7,7 +8,7 @@ export function useVirtualizedHandle(
   ref: React.Ref<VirtualizedListRef>,
   params: {
     direction: "horizontal" | "vertical";
-    itemSize: number | number[];
+    itemSize: number[] | number | ((index: number) => number);
     scrollContainerRef: React.RefObject<HTMLDivElement|null>;
     getScrollOffset: () => number;
   }
@@ -19,10 +20,7 @@ export function useVirtualizedHandle(
 
       if (!scrollContainerRef.current) return;
 
-      const baseOffset = Array.isArray(itemSize)
-        ? itemSize.slice(0, index).reduce((a, b) => a + b, 0)
-        : index * itemSize;
-
+      const baseOffset = getOffset(itemSize, index) 
       const itemLength = Array.isArray(itemSize)
         ? itemSize[index]
         : itemSize;
@@ -35,9 +33,9 @@ export function useVirtualizedHandle(
       let finalOffset = baseOffset;
 
       if (align === "center") {
-        finalOffset = baseOffset - viewSize / 2 + itemLength / 2;
+        finalOffset = baseOffset - viewSize / 2 
       } else if (align === "end") {
-        finalOffset = baseOffset - viewSize + itemLength;
+        finalOffset = baseOffset - viewSize ;
       }
 
       finalOffset += offset;

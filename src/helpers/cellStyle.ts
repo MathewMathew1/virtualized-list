@@ -8,20 +8,36 @@ export function getCellStyle({
 }: {
   row: number;
   col: number;
-  rowHeights: number[] | number;
-  columnWidths: number[] | number;
+  rowHeights: number[] | number | ((index: number) => number);
+  columnWidths: number[] | number | ((index: number) => number);
 }): VirtualizedTableCellStyle {
-  const getOffset = (index: number, sizes: number[] | number) => {
-    if (Array.isArray(sizes)) {
+  const getSize = (index: number, sizes: number[] | number | ((i: number) => number)) => {
+    if (typeof sizes === "function") return sizes(index);
+    if (Array.isArray(sizes)) return sizes[index];
+    return sizes;
+  };
+
+  const getOffset = (
+    index: number,
+    sizes: number[] | number | ((i: number) => number)
+  ) => {
+    if (typeof sizes === "function") {
+      let sum = 0;
+      for (let i = 0; i < index; i++) {
+        sum += sizes(i);
+      }
+      return sum;
+    } else if (Array.isArray(sizes)) {
       return sizes.slice(0, index).reduce((sum, s) => sum + s, 0);
+    } else {
+      return index * sizes;
     }
-    return index * sizes;
   };
 
   const top = getOffset(row, rowHeights);
   const left = getOffset(col, columnWidths);
-  const height = Array.isArray(rowHeights) ? rowHeights[row] : rowHeights;
-  const width = Array.isArray(columnWidths) ? columnWidths[col] : columnWidths;
+  const height = getSize(row, rowHeights);
+  const width = getSize(col, columnWidths);
 
   return {
     position: "absolute",
@@ -31,3 +47,4 @@ export function getCellStyle({
     width,
   };
 }
+

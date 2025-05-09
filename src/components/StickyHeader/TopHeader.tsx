@@ -6,8 +6,8 @@ import type {
 
 interface TopHeaderSectionProps {
   header: VirtualizedTableHeader;
-  columnWidths: number | number[];
-  rowHeights: number | number[];
+  columnWidths: number[] | number | ((index: number) => number);
+  rowHeights: number[] | number | ((index: number) => number);
   visibleColumns: { firstVisible: number; lastVisible: number };
   scrollLeft: number;
   leftOffset: number;

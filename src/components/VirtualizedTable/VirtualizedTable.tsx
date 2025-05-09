@@ -9,6 +9,7 @@ import { useScrollOffset2D } from "../../hooks/useScroll2D";
 import { useVirtualizedHandle2D } from "../../hooks/useVirtualizeHandle2d";
 import { StickyHeaders } from "../StickyHeader/StickyHeaders";
 import useScrollSize from "../../hooks/useScrollSize";
+import { getTotalSize } from "../../helpers/size";
 
 export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
   {
@@ -24,6 +25,7 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     overScanCount = 3,
     headers,
     AbsoluteElementComponent,
+    additionalData
   }: VirtualizedTableProps<Item>,
   ref: React.Ref<VirtualizedTableRef>
 ) => {
@@ -62,13 +64,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     paddingInWidth
   );
 
-  const totalHeight = Array.isArray(rowHeights)
-    ? rowHeights.reduce((a, b) => a + b, 0)
-    : rowHeights * rowCount;
-
-  const totalWidth = Array.isArray(columnWidths)
-    ? columnWidths.reduce((a, b) => a + b, 0)
-    : columnWidths * columnCount;
+  const totalHeight = getTotalSize(rowHeights, rowCount);
+  const totalWidth = getTotalSize(columnWidths, columnCount);
 
   const innerStyle: React.CSSProperties = {
     position: "relative",
@@ -115,6 +112,7 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
               visibleColumns={elementVisibilityCols}
               CellComponent={CellComponent}
               innerStyle={innerStyle}
+              additionalData={additionalData}
             />
           </WrapperComponent>
         ) : (
@@ -125,6 +123,7 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
             visibleColumns={elementVisibilityCols}
             CellComponent={CellComponent}
             innerStyle={innerStyle}
+            additionalData={additionalData}
           />
         )}
       </div>

@@ -1,4 +1,5 @@
 import type { VirtualizedHeaderStyle } from "../types/VirtualizedTableTypes";
+import { getOffset, getSize } from "./size";
 
 
 export function getHeaderStyle({
@@ -10,31 +11,21 @@ export function getHeaderStyle({
 }: {
   indexPosition: number;
   direction: "top" | "bottom" | "left" | "right";
-  rowHeights: number[] | number;
-  columnWidths: number[] | number;
+  rowHeights: number[] | number | ((index: number) => number);
+  columnWidths: number[] | number | ((index: number) => number);
   size: number
 }): VirtualizedHeaderStyle  {
-  const getOffset = (index: number, sizes: number[] | number) => {
-    if (Array.isArray(sizes)) {
-      return sizes.slice(0, index).reduce((sum, s) => sum + s, 0);
-    }
-    return index * sizes;
-  };
 
-  const height = Array.isArray(rowHeights)
-    ? rowHeights[indexPosition]
-    : rowHeights;
-  const width = Array.isArray(columnWidths)
-    ? columnWidths[indexPosition]
-    : columnWidths;
+  const height = getSize(rowHeights, indexPosition) 
+  const width = getSize(columnWidths, indexPosition)  
 
   let top = 0;
   let left = 0;
 
   if (direction === "top" || direction === "bottom") {
-    left = getOffset(indexPosition, columnWidths);
+    left = getOffset(columnWidths, indexPosition);
   } else {
-    top = getOffset(indexPosition, rowHeights);
+    top = getOffset(rowHeights, indexPosition);
   }
 
   return {

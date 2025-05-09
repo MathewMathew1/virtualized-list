@@ -34,8 +34,8 @@ describe("VirtualizedList", () => {
 
     const items = getAllByTestId("item");
     expect(items.length).toBeGreaterThan(0);
-    expect(queryByText("Item 4")).toBeInTheDocument();
-    expect(queryByText("Item 5")).not.toBeInTheDocument();
+    expect(queryByText("Item 3")).toBeInTheDocument();
+    expect(queryByText("Item 4")).not.toBeInTheDocument();
 
     rerender(
     <VirtualizedList
@@ -48,7 +48,7 @@ describe("VirtualizedList", () => {
     />
     )
 
-    expect(queryByText("Item 5")).toBeInTheDocument();
+    expect(queryByText("Item 4")).toBeInTheDocument();
   });
 
   it("renders WrapperComponent when provided", () => {

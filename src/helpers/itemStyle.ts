@@ -1,23 +1,13 @@
 import { Direction, VirtualizedItemStyle } from "../types/VirtualizedListTypes";
-
-export const getItemOffset = (itemSize: number | number[], index: number) => {
-  if (Array.isArray(itemSize)) {
-    return itemSize.slice(0, index).reduce((sum, size) => sum + size, 0);
-  }
-  return index * itemSize;
-};
-
-export const getItemSize = (itemSize: number | number[], index: number) => {
-  return Array.isArray(itemSize) ? itemSize[index] : itemSize;
-};
+import { getOffset, getSize } from "./size";
 
 export const getItemStyle = (
   index: number,
-  itemSize: number | number[],
+  itemSize: number[] | number | ((index: number) => number),
   direction: Direction,
 ): VirtualizedItemStyle => {
-  const offset = getItemOffset(itemSize, index);
-  const size = getItemSize(itemSize, index);
+  const offset = getOffset(itemSize, index);
+  const size = getSize(itemSize, index);
 
   return direction === "vertical"
     ? {

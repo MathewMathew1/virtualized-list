@@ -29,7 +29,7 @@ export type VirtualizedListBaseProps<
   Item extends React.ComponentType<any>
 > = {
   data: T[];
-  itemSize: number | number[];
+  itemSize: number[] | number | ((index: number) => number);
   ItemComponent: Item;
   overScanCount?: number;
   onScroll?: (offset: number) => void;
@@ -53,7 +53,7 @@ export type VirtualizedListBaseProps<
 
 export type VirtualizedListContentProps<T, K> = {
   data: T[];
-  itemSize: number | number[];
+  itemSize: number[] | number | ((index: number) => number);
   direction: Direction;
   firstVisible: number;
   lastVisible: number;

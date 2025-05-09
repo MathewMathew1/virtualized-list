@@ -1,10 +1,10 @@
 import { VirtualizedListProps, VirtualizedListRef } from "../../types/VirtualizedListTypes";
 import { useVisibleIndices } from "../../hooks/useVisibleIndices";
 import { useScrollOffset } from "../../hooks/useScrollOffset";
-import { useTotalSize } from "../../hooks/useTotalSize";
 import { forwardRef, Ref, useRef } from "react";
 import { useVirtualizedHandle } from "../../hooks/useVirtualizeHandle";
 import VirtualizedListContent from "./VirtualizedContent";
+import { getTotalSize } from "../../helpers/size";
 
 const VirtualizedListInner = <
 T,
@@ -27,7 +27,7 @@ Item extends React.ComponentType<any>
   const scrollContainerRef = useRef<HTMLDivElement|null>(null);
   const { scrollOffset, handleScroll } = useScrollOffset(onScroll);
 
-  const totalSize = useTotalSize(itemSize, data.length);
+  const totalSize = getTotalSize(itemSize, data.length) 
   const elementVisibility = useVisibleIndices(
     data.length,
     itemSize,
