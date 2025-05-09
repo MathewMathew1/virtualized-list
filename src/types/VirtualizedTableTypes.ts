@@ -13,18 +13,17 @@ export interface VirtualizedTableRef {
   getScrollOffset: () => { scrollLeft: number; scrollTop: number };
 }
 
-export interface VirtualizedTableContentProps {
-  rowHeights: number[] | number;
-  columnWidths: number[] | number;
+export interface VirtualizedTableContentProps<K> {
   visibleRows: { firstVisible: number; lastVisible: number };
   visibleColumns: { firstVisible: number; lastVisible: number };
   CellComponent: React.ComponentType<{
     rowIndex: number;
     columnIndex: number;
     style: VirtualizedTableCellStyle;
+    additionalData: K extends undefined ? undefined : K;
   }>;
   innerStyle: React.CSSProperties;
-
+  additionalData: K;
 }
 
 type InferAdditionalData<T> = T extends React.ComponentType<infer P>

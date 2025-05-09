@@ -1,29 +1,30 @@
 import { getCellStyle } from "../../helpers/cellStyle";
-import type { VirtualizedTableContentProps } from "../../types/VirtualizedTableTypes";
+import type {
+  VirtualizedTableCellStyle,
+  VirtualizedTableContentProps,
+} from "../../types/VirtualizedTableTypes";
 
-const VirtualizedTableContent = ({
+const VirtualizedTableContent = <T, K>({
   rowHeights,
   columnWidths,
   visibleRows,
   visibleColumns,
   CellComponent,
   innerStyle,
-
-}: VirtualizedTableContentProps) => {
- 
+  additionalData,
+}: VirtualizedTableContentProps<T>) => {
   return (
     <>
-  
       <div style={innerStyle}>
         {Array.from(
-          { length: visibleRows.lastVisible - visibleRows.firstVisible  },
+          { length: visibleRows.lastVisible - visibleRows.firstVisible },
           (_, rowIdx) => {
             const row = visibleRows.firstVisible + rowIdx;
 
             return Array.from(
               {
                 length:
-                  visibleColumns.lastVisible - visibleColumns.firstVisible ,
+                  visibleColumns.lastVisible - visibleColumns.firstVisible,
               },
               (_, colIdx) => {
                 const col = visibleColumns.firstVisible + colIdx;
@@ -34,14 +35,13 @@ const VirtualizedTableContent = ({
                   columnWidths,
                 });
 
-                return (
-                  <CellComponent
-                    key={`${row}-${col}`}
-                    rowIndex={row}
-                    columnIndex={col}
-                    style={style}
-                  />
-                );
+                return renderItem(CellComponent, {
+                  key: `${row}-${col}`,
+                  columnIndex: col,
+                  rowIndex: row,
+                  style: style,
+                  additionalData,
+                });
               }
             );
           }
@@ -50,5 +50,24 @@ const VirtualizedTableContent = ({
     </>
   );
 };
+
+function renderItem<K>(
+  Component: React.ComponentType<any>,
+  props: {
+    columnIndex: number;
+    style: VirtualizedTableCellStyle;
+    additionalData?: K;
+    key: string;
+    rowIndex: number;
+  }
+) {
+  const { key, additionalData, ...rest } = props;
+  console.log(additionalData);
+  return additionalData !== undefined ? (
+    <Component key={key} {...rest} additionalData={additionalData} />
+  ) : (
+    <Component key={key} {...rest} />
+  );
+}
 
 export default VirtualizedTableContent;
