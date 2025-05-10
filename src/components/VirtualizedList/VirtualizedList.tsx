@@ -27,7 +27,6 @@ Item extends React.ComponentType<any>
   const scrollContainerRef = useRef<HTMLDivElement|null>(null);
   const { scrollOffset, handleScroll } = useScrollOffset(onScroll);
 
-  const totalSize = getTotalSize(itemSize, data.length) 
   const elementVisibility = useVisibleIndices(
     data.length,
     itemSize,
@@ -46,8 +45,8 @@ Item extends React.ComponentType<any>
 
   const innerStyle: React.CSSProperties = {
     position: "relative",
-    height: direction === "vertical" ? totalSize : height,
-    width: direction === "horizontal" ? totalSize : width,
+    height: direction === "vertical" ? elementVisibility.total : height,
+    width: direction === "horizontal" ? elementVisibility.total : width,
   };
 
   return (
