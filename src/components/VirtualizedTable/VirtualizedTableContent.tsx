@@ -1,7 +1,6 @@
 import { getCellStyle } from "../../helpers/cellStyle";
-import type {
-  VirtualizedTableContentProps,
-} from "../../types/VirtualizedTableTypes";
+import { useCellStyleCache } from "../../hooks/useCellStyleCache";
+import type { VirtualizedTableContentProps } from "../../types/VirtualizedTableTypes";
 
 const VirtualizedTableContent = <T, K>({
   rowHeights,
@@ -11,14 +10,26 @@ const VirtualizedTableContent = <T, K>({
   CellComponent,
   innerStyle,
   additionalData,
+  rowsOffsets,
+  columnsOffsets,
 }: VirtualizedTableContentProps<T>) => {
+
+  const getCachedCellStyle = useCellStyleCache(rowsOffsets, columnsOffsets, rowHeights, columnWidths);
 
   const cells = [];
 
-  for (let row = visibleRows.firstVisible; row <= visibleRows.lastVisible; row++) {
-    for (let col = visibleColumns.firstVisible; col <= visibleColumns.lastVisible; col++) {
-      const style = getCellStyle({ row, col, rowHeights, columnWidths });
-  
+  for (
+    let row = visibleRows.firstVisible;
+    row <= visibleRows.lastVisible;
+    row++
+  ) {
+    for (
+      let col = visibleColumns.firstVisible;
+      col <= visibleColumns.lastVisible;
+      col++
+    ) {
+      const style = getCachedCellStyle({row, col})
+
       cells.push(
         <CellComponent
           key={`${row}-${col}`}
@@ -30,7 +41,7 @@ const VirtualizedTableContent = <T, K>({
       );
     }
   }
-  
+
   return <div style={innerStyle}>{cells}</div>;
 };
 

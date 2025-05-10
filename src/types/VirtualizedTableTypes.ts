@@ -16,6 +16,8 @@ export interface VirtualizedTableRef {
 export interface VirtualizedTableContentProps<K> {
   rowHeights: number[] | number | ((index: number) => number);
   columnWidths: number[] | number | ((index: number) => number);
+  rowsOffsets: number[]
+  columnsOffsets: number[]
   visibleRows: { firstVisible: number; lastVisible: number };
   visibleColumns: { firstVisible: number; lastVisible: number };
   CellComponent: React.ComponentType<{

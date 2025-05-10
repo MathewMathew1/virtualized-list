@@ -9,7 +9,6 @@ import { useScrollOffset2D } from "../../hooks/useScroll2D";
 import { useVirtualizedHandle2D } from "../../hooks/useVirtualizeHandle2d";
 import { StickyHeaders } from "../StickyHeader/StickyHeaders";
 import useScrollSize from "../../hooks/useScrollSize";
-import { getTotalSize } from "../../helpers/size";
 
 export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
   {
@@ -25,7 +24,7 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     overScanCount = 3,
     headers,
     AbsoluteElementComponent,
-    additionalData
+    additionalData,
   }: VirtualizedTableProps<Item>,
   ref: React.Ref<VirtualizedTableRef>
 ) => {
@@ -42,9 +41,10 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     }),
   });
 
-  const paddingInHeight = (headers?.top?.size || 0) + (headers?.bottom?.size || 0)
-  const paddingInWidth = (headers?.left?.size || 0 ) + (headers?.right?.size || 0)
-
+  const paddingInHeight =
+    (headers?.top?.size || 0) + (headers?.bottom?.size || 0);
+  const paddingInWidth =
+    (headers?.left?.size || 0) + (headers?.right?.size || 0);
 
   const elementVisibilityRows = useVisibleIndices(
     rowCount,
@@ -63,8 +63,6 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     overScanCount,
     paddingInWidth
   );
-
-
 
   const innerStyle: React.CSSProperties = {
     position: "relative",
@@ -90,7 +88,12 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
         scrollTop={scrollTop}
         scrollbarSize={scrollbarSize}
       />
-      {AbsoluteElementComponent ? <AbsoluteElementComponent currentLeftOffset={scrollLeft} currentTopOffset={scrollTop} /> : null}
+      {AbsoluteElementComponent ? (
+        <AbsoluteElementComponent
+          currentLeftOffset={scrollLeft}
+          currentTopOffset={scrollTop}
+        />
+      ) : null}
       <div
         style={{
           height: elementVisibilityRows.total,
@@ -105,6 +108,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
         {WrapperComponent ? (
           <WrapperComponent>
             <VirtualizedTableContent
+              rowsOffsets={elementVisibilityRows.sizesOffsetOfIndice}
+              columnsOffsets={elementVisibilityCols.sizesOffsetOfIndice}
               rowHeights={rowHeights}
               columnWidths={columnWidths}
               visibleRows={elementVisibilityRows.visible}
@@ -117,7 +122,9 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
         ) : (
           <VirtualizedTableContent
             rowHeights={rowHeights}
+            rowsOffsets={elementVisibilityRows.sizesOffsetOfIndice}
             columnWidths={columnWidths}
+            columnsOffsets={elementVisibilityCols.sizesOffsetOfIndice}
             visibleRows={elementVisibilityRows.visible}
             visibleColumns={elementVisibilityCols.visible}
             CellComponent={CellComponent}

@@ -74,6 +74,6 @@ export function useVisibleIndices(
     sizesOffsetOfIndice,
     sizesSet,
   ]);
-
-  return {visible, total}
+ 
+  return {visible, total, setValuesSinceIndex, sizesOffsetOfIndice: sizesOffsetOfIndice}
 }
