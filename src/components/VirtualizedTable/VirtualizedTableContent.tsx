@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { getCellStyle } from "../../helpers/cellStyle";
 import type {
-  VirtualizedTableCellStyle,
   VirtualizedTableContentProps,
 } from "../../types/VirtualizedTableTypes";
 

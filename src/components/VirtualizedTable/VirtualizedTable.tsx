@@ -64,8 +64,7 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
     paddingInWidth
   );
 
-  const totalHeight = getTotalSize(rowHeights, rowCount);
-  const totalWidth = getTotalSize(columnWidths, columnCount);
+
 
   const innerStyle: React.CSSProperties = {
     position: "relative",
@@ -83,8 +82,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
         headers={headers}
         rowHeights={rowHeights}
         columnWidths={columnWidths}
-        visibleRows={elementVisibilityRows}
-        visibleColumns={elementVisibilityCols}
+        visibleRows={elementVisibilityRows.visible}
+        visibleColumns={elementVisibilityCols.visible}
         height={height}
         width={width}
         scrollLeft={scrollLeft}
@@ -94,8 +93,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
       {AbsoluteElementComponent ? <AbsoluteElementComponent currentLeftOffset={scrollLeft} currentTopOffset={scrollTop} /> : null}
       <div
         style={{
-          height: totalHeight,
-          width: totalWidth,
+          height: elementVisibilityRows.total,
+          width: elementVisibilityCols.total,
           position: "relative",
           paddingLeft: headers?.left?.size ?? 0,
           paddingBottom: headers?.bottom?.size,
@@ -108,8 +107,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
             <VirtualizedTableContent
               rowHeights={rowHeights}
               columnWidths={columnWidths}
-              visibleRows={elementVisibilityRows}
-              visibleColumns={elementVisibilityCols}
+              visibleRows={elementVisibilityRows.visible}
+              visibleColumns={elementVisibilityCols.visible}
               CellComponent={CellComponent}
               innerStyle={innerStyle}
               additionalData={additionalData}
@@ -119,8 +118,8 @@ export const VirtualizedTableInner = <Item extends React.ComponentType<any>>(
           <VirtualizedTableContent
             rowHeights={rowHeights}
             columnWidths={columnWidths}
-            visibleRows={elementVisibilityRows}
-            visibleColumns={elementVisibilityCols}
+            visibleRows={elementVisibilityRows.visible}
+            visibleColumns={elementVisibilityCols.visible}
             CellComponent={CellComponent}
             innerStyle={innerStyle}
             additionalData={additionalData}

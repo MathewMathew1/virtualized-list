@@ -70,8 +70,8 @@ Item extends React.ComponentType<any>
             data={data}
             itemSize={itemSize}
             direction={direction}
-            firstVisible={elementVisibility.firstVisible}
-            lastVisible={elementVisibility.lastVisible}
+            firstVisible={elementVisibility.visible.firstVisible}
+            lastVisible={elementVisibility.visible.lastVisible}
             ItemComponent={ItemComponent}
             additionalData={additionalData!}
             innerStyle={innerStyle}
@@ -82,8 +82,8 @@ Item extends React.ComponentType<any>
           data={data}
           itemSize={itemSize}
           direction={direction}
-          firstVisible={elementVisibility.firstVisible}
-          lastVisible={elementVisibility.lastVisible}
+          firstVisible={elementVisibility.visible.firstVisible}
+          lastVisible={elementVisibility.visible.lastVisible}
           ItemComponent={ItemComponent}
           additionalData={additionalData!}
           innerStyle={innerStyle}

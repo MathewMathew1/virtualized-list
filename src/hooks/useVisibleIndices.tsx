@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getSize } from "../helpers/size";
+import { useTotalSize } from "./useTotalSize";
+import { searchStartingIndex } from "../helpers/search";
 
 export function useVisibleIndices(
   dataLength: number,
@@ -10,28 +12,35 @@ export function useVisibleIndices(
   padding: number
 ) {
   const [visible, setVisible] = useState({ firstVisible: 0, lastVisible: 0 });
+  const { total, setValuesSinceIndex, sizesOffsetOfIndice, sizesSet } =
+    useTotalSize(itemSize, dataLength);
 
   useEffect(() => {
     const viewportSizeWithPadding = viewportSize - padding;
 
     if (Array.isArray(itemSize) || typeof itemSize === "function") {
-      let current = 0,
-        start = 0,
-        end = 0;
+      if (!sizesSet) return;
+      const startingIndex = searchStartingIndex(
+        sizesOffsetOfIndice,
+        0,
+        0,
+        dataLength - 1,
+        scrollOffset
+      );
 
-      for (let i = 0; i < dataLength; i++) {
-        if (current < scrollOffset) start = i;
-        if (current < scrollOffset + viewportSizeWithPadding) {
+      let currentOffset = sizesOffsetOfIndice[startingIndex] || 0,
+        end = startingIndex;
+
+      for (let i = startingIndex; i < dataLength; i++) {
+        if (currentOffset < scrollOffset + viewportSizeWithPadding) {
           end = i;
         } else {
           break;
         }
-        current += getSize(itemSize, i);
+        currentOffset += getSize(itemSize, i);
+      }
 
-        
-      } 
-      
-      const first = Math.max(start - buffer, 0);
+      const first = Math.max(startingIndex - buffer, 0);
       const last = Math.min(end + buffer, dataLength - 1);
       setVisible((prev) => {
         if (prev.firstVisible !== first || prev.lastVisible !== last) {
@@ -43,7 +52,9 @@ export function useVisibleIndices(
       const first = Math.max(Math.floor(scrollOffset / itemSize) - buffer, 0);
 
       const last = Math.min(
-        Math.ceil((scrollOffset + viewportSizeWithPadding) / itemSize) + buffer - 1,
+        Math.ceil((scrollOffset + viewportSizeWithPadding) / itemSize) +
+          buffer -
+          1,
         dataLength - 1
       );
 
@@ -54,7 +65,15 @@ export function useVisibleIndices(
         return prev;
       });
     }
-  }, [scrollOffset, itemSize, viewportSize, buffer, dataLength]);
+  }, [
+    scrollOffset,
+    itemSize,
+    viewportSize,
+    buffer,
+    dataLength,
+    sizesOffsetOfIndice,
+    sizesSet,
+  ]);
 
-  return visible;
+  return {visible, total}
 }
