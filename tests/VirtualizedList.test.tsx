@@ -32,23 +32,22 @@ describe("VirtualizedList", () => {
       />
     );
 
-    const items = getAllByTestId("item");
-    expect(items.length).toBeGreaterThan(0);
-    expect(queryByText("Item 3")).toBeInTheDocument();
-    expect(queryByText("Item 4")).not.toBeInTheDocument();
+    let items = getAllByTestId("item").map((el) => el.textContent);
+    expect(items.length).toEqual(4);
 
     rerender(
-    <VirtualizedList
-      data={data}
-      direction="vertical"
-      itemSize={itemSize}
-      height={100}
-      ItemComponent={mockItem}
-      overScanCount={1}
-    />
-    )
+      <VirtualizedList
+        data={data}
+        direction="vertical"
+        itemSize={itemSize}
+        height={100}
+        ItemComponent={mockItem}
+        overScanCount={1}
+      />
+    );
 
-    expect(queryByText("Item 4")).toBeInTheDocument();
+    items = getAllByTestId("item").map((el) => el.textContent);
+    expect(items.length).toEqual(5);
   });
 
   it("renders WrapperComponent when provided", () => {

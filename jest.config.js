@@ -11,4 +11,6 @@ module.exports = {
     "^.+\\.(ts|tsx)$": "ts-jest", 
   },
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
+
