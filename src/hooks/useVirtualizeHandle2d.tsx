@@ -9,9 +9,28 @@ export function useVirtualizedHandle2D(
     rowHeights: number | number[] | ((index: number) => number);
     columnWidths: number | number[] | ((index: number) => number);
     getScrollOffset: () => { scrollLeft: number; scrollTop: number };
-  }
+    setRowValuesSinceIndex: (
+      index: number,
+      itemSize: number[] | ((index: number) => number),
+    ) => void;
+    setColValuesSinceIndex: (
+      index: number,
+      itemSize: number[] | ((index: number) => number),
+    ) => void;
+
+  },
 ) {
   useImperativeHandle(ref, () => ({
+    updateVisualSinceCol: (index: number) => {
+      if (typeof params.columnWidths !== "number") {
+        params.setColValuesSinceIndex(index, params.columnWidths);
+      }
+    },
+    updateVisualSinceRow: (index: number) => {
+      if (typeof params.rowHeights !== "number") {
+        params.setRowValuesSinceIndex(index, params.rowHeights);
+      }
+    },
     scrollTo: (row, col, options = {}) => {
       const {
         offsetX = 0,
@@ -53,4 +72,3 @@ export function useVirtualizedHandle2D(
     getScrollOffset: params.getScrollOffset,
   }));
 }
-

@@ -2,28 +2,37 @@ import { useImperativeHandle } from "react";
 import { VirtualizedListRef } from "../types/VirtualizedListTypes";
 import { getOffset } from "../helpers/size";
 
-export type Options = {offset: number, align: "start"|"center"|"end"}
+export type Options = { offset: number; align: "start" | "center" | "end" };
 
 export function useVirtualizedHandle(
   ref: React.Ref<VirtualizedListRef>,
   params: {
     direction: "horizontal" | "vertical";
     itemSize: number[] | number | ((index: number) => number);
-    scrollContainerRef: React.RefObject<HTMLDivElement|null>;
+    scrollContainerRef: React.RefObject<HTMLDivElement | null>;
     getScrollOffset: () => number;
+    setSizesSinceIndex: (
+      index: number,
+      itemSize: number[] | ((index: number) => number)
+    ) => void;
   }
 ) {
   useImperativeHandle(ref, () => ({
-    scrollToIndex: (index, options: Options = {offset: 0, align: "start"}) => {
+    updateSizesSinceIndex: (index: number) => {
+      if (typeof params.itemSize !== "number") {
+        params.setSizesSinceIndex(index, params.itemSize);
+      }
+    },
+    scrollToIndex: (
+      index,
+      options: Options = { offset: 0, align: "start" }
+    ) => {
       const { offset = 0, align = "start" } = options;
       const { direction, itemSize, scrollContainerRef } = params;
 
       if (!scrollContainerRef.current) return;
 
-      const baseOffset = getOffset(itemSize, index) 
-      const itemLength = Array.isArray(itemSize)
-        ? itemSize[index]
-        : itemSize;
+      const baseOffset = getOffset(itemSize, index);
 
       const viewSize =
         direction === "horizontal"
@@ -33,9 +42,9 @@ export function useVirtualizedHandle(
       let finalOffset = baseOffset;
 
       if (align === "center") {
-        finalOffset = baseOffset - viewSize / 2 
+        finalOffset = baseOffset - viewSize / 2;
       } else if (align === "end") {
-        finalOffset = baseOffset - viewSize ;
+        finalOffset = baseOffset - viewSize;
       }
 
       finalOffset += offset;
