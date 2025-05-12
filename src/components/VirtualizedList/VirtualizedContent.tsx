@@ -1,6 +1,5 @@
 import { getItemStyle } from "../../helpers/itemStyle";
 import {
-  VirtualizedItemStyle,
   VirtualizedListContentProps,
 } from "../../types/VirtualizedListTypes";
 

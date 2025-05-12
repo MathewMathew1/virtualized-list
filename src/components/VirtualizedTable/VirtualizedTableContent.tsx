@@ -1,4 +1,4 @@
-import { getCellStyle } from "../../helpers/cellStyle";
+import { useEffect, useMemo } from "react";
 import { useCellStyleCache } from "../../hooks/useCellStyleCache";
 import type { VirtualizedTableContentProps } from "../../types/VirtualizedTableTypes";
 
@@ -8,41 +8,55 @@ const VirtualizedTableContent = <T, K>({
   visibleRows,
   visibleColumns,
   CellComponent,
-  innerStyle,
   additionalData,
   rowsOffsets,
   columnsOffsets,
+  offsetVersion,
 }: VirtualizedTableContentProps<T>) => {
+  const { getCachedCellStyle, clearCache } = useCellStyleCache(
+    rowsOffsets,
+    columnsOffsets,
+    rowHeights,
+    columnWidths
+  );
 
-  const getCachedCellStyle = useCellStyleCache(rowsOffsets, columnsOffsets, rowHeights, columnWidths);
+  useEffect(() => {
+    clearCache();
+  }, [offsetVersion]);
 
-  const cells = [];
+  const cells = useMemo(() => {
+    const tempCells = [];
 
-  for (
-    let row = visibleRows.firstVisible;
-    row <= visibleRows.lastVisible;
-    row++
-  ) {
     for (
-      let col = visibleColumns.firstVisible;
-      col <= visibleColumns.lastVisible;
-      col++
+      let row = visibleRows.firstVisible;
+      row <= visibleRows.lastVisible;
+      row++
     ) {
-      const style = getCachedCellStyle({row, col})
+      for (
+        let col = visibleColumns.firstVisible;
+        col <= visibleColumns.lastVisible;
+        col++
+      ) {
+        const style = getCachedCellStyle({ row, col });
 
-      cells.push(
-        <CellComponent
-          key={`${row}-${col}`}
-          rowIndex={row}
-          columnIndex={col}
-          style={style}
-          additionalData={additionalData as T extends undefined ? undefined : T}
-        />
-      );
+        tempCells.push(
+          <CellComponent
+            key={`${row}-${col}`}
+            rowIndex={row}
+            columnIndex={col}
+            style={style}
+            additionalData={
+              additionalData as T extends undefined ? undefined : T
+            }
+          />
+        );
+      }
     }
-  }
 
-  return <div style={innerStyle}>{cells}</div>;
+    return tempCells;
+  }, [visibleRows, visibleColumns, getCachedCellStyle, additionalData]);
+
+  return <div style={{ position: "relative" }}>{cells}</div>;
 };
 
 export default VirtualizedTableContent;

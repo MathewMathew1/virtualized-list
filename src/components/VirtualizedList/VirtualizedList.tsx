@@ -41,6 +41,7 @@ Item extends React.ComponentType<any>
     itemSize,
     scrollContainerRef,
     getScrollOffset: () => scrollOffset,
+    setSizesSinceIndex: elementVisibility.setValuesSinceIndex
   });
 
   const innerStyle: React.CSSProperties = {
@@ -58,6 +59,7 @@ Item extends React.ComponentType<any>
         overflowY: direction === "vertical" ? "auto" : "hidden",
         overflowX: direction === "horizontal" ? "auto" : "hidden",
         position: "relative",
+        willChange: "transform"
       }}
       onScroll={(e) => handleScroll(e, direction)}
     >
