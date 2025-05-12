@@ -36,6 +36,7 @@ export const TopHeaderSection = ({
             display: "flex",
             flexDirection: "row",
             left: 0,
+            
           }}
         >
           <div style={{ position: "relative", marginLeft: headers.left?.size }}>

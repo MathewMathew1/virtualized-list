@@ -47,7 +47,9 @@ export const StickyHeaders = ({
         background: "white",
         display: "flex",
         flexDirection: "row",
+        animation: "500ms ease-in-out 0s normal none 1 running fadeInDown"
       }}
+      
     >
       <div style={{ position: "relative", height: "100%", width: "100%" }}>
         {headers.top ? (
