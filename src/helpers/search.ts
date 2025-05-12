@@ -5,7 +5,7 @@ export const searchStartingIndex = (
   upperBoundaryIndex: number,
   currentOffset: number
 ): number => {
-  // Prevent invalid index ranges
+
   if (lowerBoundaryIndex > upperBoundaryIndex) {
     return Math.max(0, Math.min(lookedIndex, itemOffsets.length - 1));
   }
