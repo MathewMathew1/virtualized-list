@@ -17,6 +17,7 @@ export const useScrollOffset = (
         : e.currentTarget.scrollTop;
 
     setOffset(scrollValue);
+    onScrollOffsetChange?.(scrollValue);
   };
 
   return { scrollOffset: offset, handleScroll };
