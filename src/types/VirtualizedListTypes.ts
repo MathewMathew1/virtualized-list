@@ -65,6 +65,7 @@ export type VirtualizedListContentProps<T, K> = {
   }>;
   additionalData: K;
   innerStyle: React.CSSProperties;
+
 };
 
 export type Direction = "vertical" | "horizontal";
