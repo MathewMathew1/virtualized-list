@@ -26,7 +26,7 @@ export const useTotalSize = (itemSize: number[] | number | ((index: number) => n
     } else {
       setValuesSinceIndex(0, itemSize)
     }
-  }, [itemSize, length]);
+  }, []);
 
   return {total, setValuesSinceIndex, sizesOffsetOfIndice, sizesSet}
 };
