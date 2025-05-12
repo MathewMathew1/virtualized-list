@@ -11,8 +11,13 @@ export function useCellStyleCache(
   const cacheRef = useRef(new Map<string, VirtualizedTableCellStyle>());
 
   useEffect(() => {
+
     cacheRef.current.clear();
   }, [rowOffsets, colOffsets]);
+
+  const clearCache = () => {
+    cacheRef.current.clear();
+  };
 
   const getCachedCellStyle = ({
     row,
@@ -25,9 +30,13 @@ export function useCellStyleCache(
     const cached = cacheRef.current.get(key);
     if (cached) return cached;
 
-    const top = typeof rowHeights === "number"? row * rowHeights : rowOffsets[row] 
-    const left = typeof columnWidths === "number"? col * columnWidths:  colOffsets[col] 
-   
+    const top = typeof rowHeights === "number"
+      ? row * rowHeights
+      : rowOffsets[row];
+    const left = typeof columnWidths === "number"
+      ? col * columnWidths
+      : colOffsets[col];
+
     const height = getSize(rowHeights, row);
     const width = getSize(columnWidths, col);
 
@@ -43,5 +52,6 @@ export function useCellStyleCache(
     return style;
   };
 
-  return getCachedCellStyle;
+  return { getCachedCellStyle, clearCache };
 }
+
