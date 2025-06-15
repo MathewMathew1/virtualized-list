@@ -57,5 +57,6 @@ export function useVirtualizedHandle(
     },
 
     getScrollOffset: params.getScrollOffset,
+    scrollContainer: params.scrollContainerRef.current
   }));
 }

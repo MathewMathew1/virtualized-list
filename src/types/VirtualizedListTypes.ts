@@ -9,6 +9,7 @@ export type VirtualizedItemStyle = {
 export type VirtualizedListRef = {
   getScrollOffset: () => number;
   scrollToIndex: (index: number) => void;
+  scrollContainer: HTMLDivElement | null
 };
 
 export type VirtualizedWrapperProps = {
